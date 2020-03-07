@@ -20,20 +20,12 @@ class GitRepoDataSourceImpl(context: Context) : GitRepoDataSource {
     private val repoDao = GitRepoDatabase.getDatabase(context)!!.gitRepoDao()
 
     override suspend fun addAll(repoList: List<GitRepo>) {
-        return repoDao.insertAllRepo(repoList.map {
-            GitRepoEntity(it.author, it.name ,it.avatar, it.url,
-                it.description, it.language, it.languageColor, it.stars,
-                it.forks, it.currentPeriodStars,
-                it.builtBy.map { builtBy -> BuiltByEntity (builtBy.username, builtBy.href, builtBy.avatar) })
-        })
+        val repoList =  ObjectMapper.mapDomainToEntity(repoList)
+        return repoDao.insertAllRepo(repoList)
     }
 
     override suspend fun readAll(): List<GitRepo> {
-       return repoDao.getAllRepo().map {
-           GitRepo(it.author, it.name ,it.avatar, it.url,
-               it.description, it.language, it.languageColor, it.stars,
-               it.forks, it.currentPeriodStars,
-               it.builtBy.map { builtBy -> BuiltBy(builtBy.username, builtBy.href, builtBy.avatar) }) }
+        return ObjectMapper.mapEntityToDomain(repoDao.getAllRepo())
     }
 
 
@@ -47,12 +39,7 @@ class GitRepoDataSourceImpl(context: Context) : GitRepoDataSource {
                 val repoList = response!!.body()!! as List<GitRepoEntity>
                 if(repoList.isNotEmpty()) {
                     serverCallback.onRepoListLoaded(
-                        repoList.map {
-                            GitRepo(it.author, it.name ,it.avatar, it.url,
-                                it.description, it.language, it.languageColor, it.stars,
-                                it.forks, it.currentPeriodStars,
-                                it.builtBy.map { builtBy -> BuiltBy(builtBy.username, builtBy.href, builtBy.avatar) })
-                        }
+                        ObjectMapper.mapEntityToDomain(repoList)
                     )
                 } else {
                     serverCallback.onError()
