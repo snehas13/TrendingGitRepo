@@ -8,4 +8,7 @@ class GitRepoRepository(private val dataSource: GitRepoDataSource) {
 
     suspend fun readAll() : List<GitRepo> =
         dataSource.readAll()
+
+    suspend fun fetchRepos(serverCallback: ServerCallback)  =
+        dataSource.fetchRepos(serverCallback)
 }
