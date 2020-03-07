@@ -16,7 +16,7 @@ class RoomGitRepoDataSource(context: Context) : GitRepoDataSource {
             GitRepoEntity(it.author, it.name ,it.avatar, it.url,
                 it.description, it.language, it.languageColor, it.stars,
                 it.forks, it.currentPeriodStars,
-                it.builtBy.map { BuiltByEntity (it.username, it.href, it.avatar) })
+                it.builtBy.map { builtBy -> BuiltByEntity (builtBy.username, builtBy.href, builtBy.avatar) })
         })
     }
 
@@ -25,6 +25,6 @@ class RoomGitRepoDataSource(context: Context) : GitRepoDataSource {
            GitRepo(it.author, it.name ,it.avatar, it.url,
                it.description, it.language, it.languageColor, it.stars,
                it.forks, it.currentPeriodStars,
-               it.builtBy.map { BuiltBy(it.username,it.href,it.avatar) }) }
+               it.builtBy.map { builtBy -> BuiltBy(builtBy.username, builtBy.href, builtBy.avatar) }) }
     }
 }
