@@ -1,10 +1,12 @@
 package com.learn.gitrepo.framework.model
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "GitRepoEntity")
 data class GitRepoEntity (
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @SerializedName("author") val author : String,
     @SerializedName("name") val name : String,
     @SerializedName("avatar") val avatar : String,

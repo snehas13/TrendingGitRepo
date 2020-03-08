@@ -11,7 +11,7 @@ class ObjectMapper {
 
         fun mapEntityToDomain(repoList: List<GitRepoEntity>): List<GitRepo> {
             return repoList.map {
-                GitRepo(it.author, it.name ,it.avatar, it.url,
+                GitRepo(it.id,it.author, it.name ,it.avatar, it.url,
                     it.description, it.language, it.languageColor, it.stars,
                     it.forks, it.currentPeriodStars,
                     it.builtBy.map { builtBy -> BuiltBy(builtBy.username, builtBy.href, builtBy.avatar) }) }
@@ -20,7 +20,7 @@ class ObjectMapper {
 
         fun mapDomainToEntity(repoList: List<GitRepo>) : List<GitRepoEntity> {
             return repoList.map {
-                GitRepoEntity(it.author, it.name ,it.avatar, it.url,
+                GitRepoEntity(it.id,it.author, it.name ,it.avatar, it.url,
                     it.description, it.language, it.languageColor, it.stars,
                     it.forks, it.currentPeriodStars,
                     it.builtBy.map { builtBy -> BuiltByEntity (builtBy.username, builtBy.href, builtBy.avatar) })}
