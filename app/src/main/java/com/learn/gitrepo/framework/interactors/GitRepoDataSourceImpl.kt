@@ -1,6 +1,7 @@
 package com.learn.gitrepo.framework.interactors
 
 import android.content.Context
+import android.util.Log
 import com.learn.data.GitRepoDataSource
 import com.learn.data.ServerCallback
 import com.learn.domain.BuiltBy
@@ -16,6 +17,7 @@ import retrofit2.Response
 class GitRepoDataSourceImpl(context: Context) : GitRepoDataSource {
 
     val gitRepoRetriever = GitRepoRetriever()
+    val TAG = "GitRepoDataSourceImpl"
 
     private val repoDao = GitRepoDatabase.getDatabase(context)!!.gitRepoDao()
 
@@ -30,13 +32,15 @@ class GitRepoDataSourceImpl(context: Context) : GitRepoDataSource {
 
 
     override suspend fun fetchRepos(serverCallback: ServerCallback) {
-        gitRepoRetriever.getGitRepo(object : Callback<GitRepoEntity> {
-            override fun onFailure(call: Call<GitRepoEntity>?, t: Throwable?) {
+        gitRepoRetriever.getGitRepo(object : Callback<List<GitRepoEntity>> {
+            override fun onFailure(call: Call<List<GitRepoEntity>>?, t: Throwable?) {
+                Log.e(TAG,"error downloading json ${t!!.message} and url is $call")
                 serverCallback.onError()
             }
 
-            override fun onResponse(call: Call<GitRepoEntity>?, response: Response<GitRepoEntity>?) {
-                val repoList = response!!.body()!! as List<GitRepoEntity>
+            override fun onResponse(call: Call<List<GitRepoEntity>>?, response: Response<List<GitRepoEntity>>?) {
+                val repoList = response!!.body()!!
+                Log.e(TAG,"Response recieved $repoList")
                 if(repoList.isNotEmpty()) {
                     serverCallback.onRepoListLoaded(
                         ObjectMapper.mapEntityToDomain(repoList)

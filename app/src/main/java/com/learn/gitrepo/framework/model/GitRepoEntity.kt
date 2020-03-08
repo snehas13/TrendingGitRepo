@@ -6,8 +6,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "GitRepoEntity")
 data class GitRepoEntity (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @SerializedName("author") val author : String,
+    @SerializedName("author")  @PrimaryKey val author : String,
     @SerializedName("name") val name : String,
     @SerializedName("avatar") val avatar : String,
     @SerializedName("url") val url : String,

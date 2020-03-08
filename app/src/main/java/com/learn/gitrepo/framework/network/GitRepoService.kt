@@ -11,5 +11,5 @@ interface GitRepoService {
     @GET("/repositories")
     fun getRepoDetails(@Query("language") language : String?,
                        @Query("since") since : String?,
-                       @Query("spoken_language_code") spoken_language_code : String?) : Call<GitRepoEntity>
+                       @Query("spoken_language_code") spoken_language_code : String?) : Call<List<GitRepoEntity>>
 }

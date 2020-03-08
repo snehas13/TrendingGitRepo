@@ -27,7 +27,7 @@ class GitRepoRetriever {
     }
 
 
-    fun getGitRepo(callback: Callback<GitRepoEntity>) { //5
+    fun getGitRepo(callback: Callback<List<GitRepoEntity>>) { //5
         val call = service.getRepoDetails(LANGUAGE, SINCE, SPOKEN_LANGUAGE_CODE)
         call.enqueue(callback)
     }

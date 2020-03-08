@@ -8,14 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.learn.domain.GitRepo
 import com.learn.gitrepo.databinding.LayoutRepoBinding
 import androidx.databinding.DataBindingUtil
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_repo.view.*
 
-class RepoAdapter(private val items: List<GitRepo>) : RecyclerView.Adapter<RepoAdapter.ViewHolder>() {
+class RepoAdapter : RecyclerView.Adapter<RepoAdapter.ViewHolder>() {
+
+    private val items:MutableList<GitRepo> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = LayoutRepoBinding.inflate(inflater)
+        val binding = LayoutRepoBinding.inflate(inflater,parent,false)
         return ViewHolder(binding.root)
+    }
+
+    fun update(repos: List<GitRepo>) {
+        items.clear()
+        items.addAll(repos)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = items.size
@@ -32,6 +41,8 @@ class RepoAdapter(private val items: List<GitRepo>) : RecyclerView.Adapter<RepoA
             binding?.repo = repo
 
             itemView.langImg.setColorFilter(Color.parseColor(repo.languageColor),android.graphics.PorterDuff.Mode.MULTIPLY)
+
+            Picasso.get().load(repo.avatar).into(itemView.image)
 
             itemView.setOnClickListener{
 
