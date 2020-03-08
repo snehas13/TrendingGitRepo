@@ -4,4 +4,6 @@
     <string name="error_internet">Something went wrong...</string>
     <string name="error_desc">An alein is probably blocking your signal</string>
     <string name="retry">RETRY</string>
+    <string name="paranthesis_left">\u0028</string>
+    <string name="paranthesis_right">\u0029</string>
 </resources>

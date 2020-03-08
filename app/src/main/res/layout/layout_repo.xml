@@ -3,8 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.coderefer.newsboard.MainActivity"
+    tools:context="com.learn.gitrepo.presentation.view.MainActivity"
     >
+
+    <data>
+        <variable
+            name="repo"
+            type="com.learn.domain.GitRepo" />
+    </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -29,6 +35,7 @@
                 android:layout_height="50dp"
                 android:scaleType="centerCrop"
                 android:padding="5dp"
+                android:layout_marginStart="5dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -36,8 +43,10 @@
                 android:id="@+id/author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:padding="5dp"
+                android:text="@{repo.author}"
+                android:textSize="@dimen/normal_text"
                 app:layout_constraintLeft_toRightOf="@+id/image"
                 app:layout_constraintTop_toTopOf="@+id/image" />
 
@@ -45,8 +54,10 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:padding="5dp"
+                android:text="@{repo.name}"
+                android:textSize="@dimen/big_text"
                 app:layout_constraintLeft_toRightOf="@+id/image"
                 app:layout_constraintTop_toBottomOf="@+id/author" />
 
@@ -54,8 +65,10 @@
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:padding="5dp"
+                android:text="@{repo.description.concat(@string/paranthesis_left).concat(repo.url).concat(@string/paranthesis_right)}"
+                android:textSize="@dimen/small_text"
                 app:layout_constraintLeft_toRightOf="@+id/image"
                 app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -63,7 +76,7 @@
                 android:id="@+id/langImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:padding="5dp"
                 android:src="@drawable/circle_shape"
                 app:layout_constraintLeft_toRightOf="@+id/image"
@@ -73,8 +86,10 @@
                 android:id="@+id/language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:padding="5dp"
+                android:text="@{repo.language}"
+                android:textSize="@dimen/small_text"
                 app:layout_constraintLeft_toRightOf="@+id/langImg"
                 app:layout_constraintTop_toBottomOf="@+id/description" />
 
@@ -82,7 +97,7 @@
                 android:id="@+id/starImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:padding="5dp"
                 android:src="@mipmap/star"
                 app:layout_constraintLeft_toRightOf="@+id/language"
@@ -92,8 +107,10 @@
                 android:id="@+id/star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:padding="5dp"
+                android:text="@{Integer.toString(repo.stars)}"
+                android:textSize="@dimen/small_text"
                 app:layout_constraintLeft_toRightOf="@+id/starImg"
                 app:layout_constraintTop_toBottomOf="@+id/description" />
 
@@ -101,7 +118,7 @@
                 android:id="@+id/forkImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:padding="5dp"
                 android:src="@mipmap/fork"
                 app:layout_constraintLeft_toRightOf="@+id/star"
@@ -111,10 +128,19 @@
                 android:id="@+id/fork"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:padding="5dp"
+                android:text="@{Integer.toString(repo.forks)}"
+                android:textSize="@dimen/small_text"
                 app:layout_constraintLeft_toRightOf="@+id/forkImg"
                 app:layout_constraintTop_toBottomOf="@+id/description" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="description,langImg,language,starImg,star,forkImg,fork"
+                android:visibility="gone" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
