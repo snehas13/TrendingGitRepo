@@ -10,6 +10,8 @@ import com.learn.gitrepo.databinding.LayoutRepoBinding
 import androidx.databinding.DataBindingUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_repo.view.*
+import jp.wasabeef.picasso.transformations.CropCircleTransformation
+
 
 class RepoAdapter : RecyclerView.Adapter<RepoAdapter.ViewHolder>() {
 
@@ -40,17 +42,14 @@ class RepoAdapter : RecyclerView.Adapter<RepoAdapter.ViewHolder>() {
 
             binding?.repo = repo
 
-            itemView.langImg.setColorFilter(Color.parseColor(repo.languageColor),android.graphics.PorterDuff.Mode.MULTIPLY)
+            itemView.langImg.setColorFilter(Color.parseColor(repo.languageColor))
 
-            Picasso.get().load(repo.avatar).into(itemView.image)
+            Picasso.get().load(repo.avatar).transform(CropCircleTransformation()).into(itemView.image)
 
             itemView.setOnClickListener{
 
-                if(itemView.group.visibility == View.GONE){
-                    itemView.group.visibility = View.VISIBLE
-                } else {
-                    itemView.group.visibility = View.GONE
-                }
+                itemView.group.visibility  =  if (itemView.group.visibility == View.GONE) View.VISIBLE else View.GONE
+
             }
         }
     }

@@ -6,8 +6,10 @@ import com.learn.gitrepo.framework.interactors.Interactors
 import com.learn.usecases.AddGitRepos
 import com.learn.usecases.FetchGitRepos
 import com.learn.usecases.GetGitRepos
+import io.reactivex.schedulers.Schedulers.single
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
+
 
 val repoModule = module {
     single {

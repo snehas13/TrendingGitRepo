@@ -1,9 +1,9 @@
 package com.learn.gitrepo.presentation.viewmodel
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.learn.data.ServerCallback
 import com.learn.domain.GitRepo
 import com.learn.gitrepo.framework.interactors.Interactors
@@ -14,23 +14,23 @@ import kotlinx.coroutines.withContext
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.net.Network
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.AndroidViewModel
 
 
-class MainViewModel : ViewModel(), KoinComponent {
+class MainViewModel(application: Application) : AndroidViewModel(application), KoinComponent {
 
     private val interactors: Interactors by inject()
+    private val context = getApplication<Application>().applicationContext
     val repoLiveData: MutableLiveData<List<GitRepo>> = MutableLiveData()
     val TAG : String = "MainViewModel"
 
-    fun fetchRepo(context: Context) {
-       if(isInternetOn(context)) {
+    var isActivityInited : Boolean = false
+
+    fun fetchRepo() {
+       if(isInternetOn()) {
            Log.d(TAG,"Internet connection available")
            fetchDataFromServer()
        } else {
@@ -40,11 +40,12 @@ class MainViewModel : ViewModel(), KoinComponent {
 
     }
 
-    fun fetchDataFromServer() {
+    private fun fetchDataFromServer() {
 
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 interactors.fetchGitRepos(object : ServerCallback {
+
                     override fun onError() {
                         Log.e(TAG,"Error downloading the Gitrepo")
                         repoLiveData.postValue(null)
@@ -70,7 +71,7 @@ class MainViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private fun isInternetOn(context: Context): Boolean {
+    private fun isInternetOn(): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as
                     ConnectivityManager
@@ -91,6 +92,7 @@ class MainViewModel : ViewModel(), KoinComponent {
         return false
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun postAndroidMInternetCheck(connectivityManager: ConnectivityManager): Boolean {
         val network = connectivityManager.activeNetwork
         val connection = connectivityManager.getNetworkCapabilities(network)
@@ -98,6 +100,11 @@ class MainViewModel : ViewModel(), KoinComponent {
         return connection != null && (
                 connection.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                         connection.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        isActivityInited = false
     }
 
 }

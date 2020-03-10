@@ -1,7 +1,6 @@
 package com.learn.domain
 
 data class GitRepo(
-    val id : Int,
     val author : String,
     val name : String,
     val avatar : String,

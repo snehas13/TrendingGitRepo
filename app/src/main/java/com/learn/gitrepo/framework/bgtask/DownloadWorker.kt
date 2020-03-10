@@ -19,6 +19,7 @@ class DownloadWorker(context : Context, workerParams : WorkerParameters) : Corou
     override suspend fun doWork(): Result = coroutineScope {
         val jobs = async {
 
+            Log.e(TAG,"Executing work manager: doWork()")
             interactors.fetchGitRepos(object : ServerCallback {
                 override fun onError() {
                     Log.e(TAG,"Error downloading the Gitrepo")

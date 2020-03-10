@@ -14,6 +14,10 @@ import com.learn.gitrepo.presentation.viewmodel.MainViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import androidx.work.*
+import com.learn.gitrepo.framework.bgtask.DownloadWorker
+import java.util.concurrent.TimeUnit
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,34 +28,71 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        shimmerLayout.startShimmerAnimation()
         initView()
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
+        if(!viewModel.isActivityInited) {
+            startAnimation()
+            viewModel.fetchRepo()
+        } else {
+            viewModel.getRepos()
+        }
+
         viewModel.repoLiveData.observe(this, Observer {
-            if(shimmerLayout.visibility == View.VISIBLE) {
-                shimmerLayout.stopShimmerAnimation()
-                shimmerLayout.visibility = View.GONE
-            }
+
+            stopAnimation()
+
             if(itemsToRefresh.isRefreshing) {
                 itemsToRefresh.isRefreshing = false
             }
+
             if(it != null && it.isNotEmpty()) {
                 viewErrorScreen(false)
+                viewModel.isActivityInited = true
                 repoAdapter.update(it)
             } else {
                 viewErrorScreen(true)
             }
         })
 
-        viewModel.fetchRepo(this)
-
         retryButton.setOnClickListener {
-            if(viewModel != null) {
-                viewModel.fetchRepo(this)
-            }
+            startAnimation()
+            viewModel.fetchRepo()
         }
+
+        initWorkManagerTask()
+    }
+
+    fun stopAnimation() {
+        if(shimmerLayout.visibility == View.VISIBLE) {
+            shimmerLayout.stopShimmerAnimation()
+            shimmerLayout.visibility = View.GONE
+        }
+    }
+
+    fun startAnimation() {
+        shimmerLayout.visibility = View.VISIBLE
+        shimmerLayout.startShimmerAnimation()
+    }
+
+    fun initWorkManagerTask() {
+        val sendDataBuilder = PeriodicWorkRequest.Builder(
+            DownloadWorker::class.java,
+            20,
+            TimeUnit.MINUTES
+        ).setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+            )
+        val periodicWorkRequest = sendDataBuilder
+            .build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "DownloadWorker",
+            ExistingPeriodicWorkPolicy.KEEP,
+            periodicWorkRequest
+        )
     }
 
     fun viewErrorScreen(status: Boolean) {
@@ -70,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = repoAdapter
 
         itemsToRefresh.setOnRefreshListener {
-            viewModel?.fetchRepo(this)
+            viewModel.fetchRepo()
         }
     }
 
@@ -88,5 +129,11 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopAnimation()
+
     }
 }
