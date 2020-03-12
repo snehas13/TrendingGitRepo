@@ -71,7 +71,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), K
         }
     }
 
-    private fun isInternetOn(): Boolean {
+    fun isInternetOn(): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as
                     ConnectivityManager

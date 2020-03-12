@@ -11,10 +11,7 @@ class GitRepoRetriever {
     private val service: GitRepoService
 
     companion object {
-        val BASE_URL = "https://private-anon-036971c63a-githubtrendingapi.apiary-mock.com"
-        val LANGUAGE = ""
-        val SINCE = "daily"
-        val SPOKEN_LANGUAGE_CODE= ""
+        val BASE_URL = "https://github-trending-api.now.sh/"
     }
 
     init {
@@ -27,8 +24,8 @@ class GitRepoRetriever {
     }
 
 
-    fun getGitRepo(callback: Callback<List<GitRepoEntity>>) { //5
-        val call = service.getRepoDetails(LANGUAGE, SINCE, SPOKEN_LANGUAGE_CODE)
+    fun getGitRepo(callback: Callback<List<GitRepoEntity>>) {
+        val call  = service.getRepoDetails()
         call.enqueue(callback)
     }
 

@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         retryButton.setOnClickListener {
+            no_connection_layout.visibility = View.GONE
             startAnimation()
             viewModel.fetchRepo()
         }
@@ -79,8 +80,8 @@ class MainActivity : AppCompatActivity() {
     fun initWorkManagerTask() {
         val sendDataBuilder = PeriodicWorkRequest.Builder(
             DownloadWorker::class.java,
-            20,
-            TimeUnit.MINUTES
+            2,
+            TimeUnit.HOURS
         ).setConstraints(
                 Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)

@@ -42,7 +42,11 @@ class RepoAdapter : RecyclerView.Adapter<RepoAdapter.ViewHolder>() {
 
             binding?.repo = repo
 
-            itemView.langImg.setColorFilter(Color.parseColor(repo.languageColor))
+            if(repo.languageColor.isNullOrBlank()) {
+                itemView.langImg.visibility = View.GONE
+            } else {
+                itemView.langImg.setColorFilter(Color.parseColor(repo.languageColor))
+            }
 
             Picasso.get().load(repo.avatar).transform(CropCircleTransformation()).into(itemView.image)
 

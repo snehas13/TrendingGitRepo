@@ -6,15 +6,15 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "GitRepoEntity")
 data class GitRepoEntity (
-    @SerializedName("author")  @PrimaryKey val author : String,
-    @SerializedName("name") val name : String,
-    @SerializedName("avatar") val avatar : String,
-    @SerializedName("url") val url : String,
-    @SerializedName("description") val description : String,
-    @SerializedName("language") val language : String,
-    @SerializedName("languageColor") val languageColor : String,
-    @SerializedName("stars") val stars : Int,
-    @SerializedName("forks") val forks : Int,
-    @SerializedName("currentPeriodStars") val currentPeriodStars : Int,
-    @SerializedName("builtBy") val builtBy : List<BuiltByEntity>
+    @SerializedName("author")  @PrimaryKey var author : String,
+    @SerializedName("name") var name : String?,
+    @SerializedName("avatar") var avatar : String?,
+    @SerializedName("url") var url : String?,
+    @SerializedName("description") var description : String?,
+    @SerializedName("language") var language : String?,
+    @SerializedName("languageColor") var languageColor : String?,
+    @SerializedName("stars") var stars : Int,
+    @SerializedName("forks") var forks : Int,
+    @SerializedName("currentPeriodStars") var currentPeriodStars : Int,
+    @SerializedName("builtBy") var builtBy : List<BuiltByEntity>?
 )
